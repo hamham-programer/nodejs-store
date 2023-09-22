@@ -3,8 +3,6 @@ module.exports = class Controller{
 constructor(){
     autoBind(this)
 }
-TESTMETHOD(){
-    return "TESTMETHOD"
-}
+
 
 }
