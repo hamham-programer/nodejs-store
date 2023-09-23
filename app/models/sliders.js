@@ -11,5 +11,5 @@ const Schema = new mongoose.Schema({
 
 });
 module.exports = {
-    SliderModel = mongoose.model ("slider", Schema)
+    SliderModel : mongoose.model ("slider", Schema)
 }

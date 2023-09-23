@@ -14,5 +14,5 @@ const Schema = new mongoose.Schema({
 
 });
 module.exports = {
-    BlogModel = mongoose.model ("blog", Schema)
+    BlogModel : mongoose.model ("blog", Schema)
 }

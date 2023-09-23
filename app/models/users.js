@@ -1,15 +1,16 @@
-const {default:mongoose} : require("mongoose")
+const { default: mongoose } = require("mongoose");
+
 
 const Schema = new mongoose.Schema({
     first_name: {type: String},
     last_name: {type: String},
     username: {type: String, lowercase:true},
-    phone: {type: String},
+    mobile : {type : String, required : true, unique: true},
     email: {type: String, lowercase:true},
     password: {type: String},
     otp: {type: Object, default:{
         code: "",
-        expires :0     // or  new Date().getDate() +120
+        expiresIn :0     // or  new Date().getDate() +120
     }},
     bils: {type:[], default:[]},
     discount: {type:Number, default:0},
@@ -20,5 +21,5 @@ const Schema = new mongoose.Schema({
 
 });
 module.exports = {
-    UserModel = mongoose.model ("user", Schema)
+    UserModel : mongoose.model ("user", Schema)
 }

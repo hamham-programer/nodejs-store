@@ -3,6 +3,8 @@ const morgan = require("morgan")
 const createError = require("http-errors")
 const express = require ("express")
 const path = require("path")
+const swaggerUI = require("swagger-ui-express")
+const swaggerJsDoc = require("swagger-jsdoc")
 const {default:mongoose} = require ("mongoose")
 module.exports = class Application{
     #app = express()
@@ -23,6 +25,26 @@ module.exports = class Application{
         this.#app.use(express.json());
         this.#app.use(express.urlencoded({extended:true}))
         this.#app.use(express.static(path.join(__dirname,"..","public")))
+        this.#app.use("/api-doc",swaggerUI.serve,swaggerUI.setup(swaggerJsDoc({
+            swaggerDefinition:{
+                opeanapi: "3.0.0",
+                info:{
+                    title: "modalall++",
+                    version: "2.0.0",
+                    description: "صنعت هوشمند در خدمت تمامی پرسنل و مشتریان",
+                    contact: {
+                        name: "hamidreza sh",
+                        url: "http://google.com",
+                        email: "hamidreza2332@gmail.com"
+                    },
+                },
+            },
+            servers: [
+                {url: "http://localhost:4000"},
+                {url: "http://localhost:5000"}
+            ],
+            apis: ["./app/router/**/*.js"],
+        })))
     }
     createServer(){
         const http = require("http")
