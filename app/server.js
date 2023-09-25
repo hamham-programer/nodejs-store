@@ -6,6 +6,7 @@ const path = require("path")
 const swaggerUI = require("swagger-ui-express")
 const swaggerJsDoc = require("swagger-jsdoc")
 const {default:mongoose} = require ("mongoose")
+const cors = require("cors")
 module.exports = class Application{
     #app = express()
     #PORT
@@ -21,6 +22,7 @@ module.exports = class Application{
         
     }
     configApplication(){
+        this.#app.use(cors())
         this.#app.use(morgan("dev"))
         this.#app.use(express.json());
         this.#app.use(express.urlencoded({extended:true}))

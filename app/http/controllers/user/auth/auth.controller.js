@@ -1,13 +1,13 @@
-const {authSchema} = require("../../../validators/user/auth.schema")
-const {RandomNumberGenrator} = require("../../../../utils/functions")
+const {getOtpSchema,checkOtpSchema} = require("../../../validators/user/auth.schema")
+const {RandomNumberGenrator,SiginAccesToken} = require("../../../../utils/functions")
 const {UserModel} = require("./../../../../models/users")
 const {EXPIRES_IN,USER_ROLE} = require("../../../../utils/constans")
 const Controller = require("../../controller")
 const createError = require("http-errors")
  class userAuthController extends Controller{
-    async Login(req,res,next){
+    async getOtp(req,res,next){
         try {
-            await authSchema.validateAsync(req.body)
+            await getOtpSchema.validateAsync(req.body)
             const {mobile} = req.body
             const code = RandomNumberGenrator()
             const result =await this.saveUser(mobile,code)
@@ -22,12 +22,35 @@ const createError = require("http-errors")
             })
 
         } catch (error) {
-            next(createError.BadRequest(error.message))
+            next(next(error))
             
         }
     }
+    async checkOtp(req,res,next){
+        try {
+            await checkOtpSchema.validateAsync(req.body)
+            const {mobile,code} = req.body
+            const user = await UserModel.findOne({mobile})
+            if(!user)throw createError.NotFound("کاربری یافت نشد")
+            if(user.otp.code != code)throw createError.Unauthorized("کد ارسال شده صحیح نمی باشد")
+            const now = Date.now()
+            if(+user.otp.expiresIn < now)throw createError.Unauthorized("کد شما منقضی شده است")
+            const accesstoken = await SiginAccesToken(user._id)
+            return res.json({
+                data:{
+                    accesstoken,
+                    user
+                }
+            })  
+            
+        } catch (error) {
+            next(error)
+        }
+    }
+
+
     async saveUser(mobile, code){
-        let otp= {
+        let otp = {
             code,
             expiresIn: EXPIRES_IN
         }

@@ -8,7 +8,7 @@ const router = require("express").Router()
  */
 /**
  * @swagger
- *  /user/login:
+ *  /user/get-otp:
  *      post:
  *          tags: [User-Authentication]
  *          summary: login user in userpanel with phone number
@@ -29,7 +29,37 @@ const router = require("express").Router()
  *              500:
  *                  description: Internal server error
  */
-router.post("/login", userAuthController.Login)
+router.post("/get-otp", userAuthController.getOtp)
+/**
+ * @swagger
+ *  /user/check-otp:
+ *      post:
+ *          tags : [User-Authentication]
+ *          summary: chack-otp value in user controller
+ *          description: chack otp with codce- mobile and expires date
+ *          parameters:
+ *          -   name: mobile
+ *              description: fa-IRI phonenumber
+ *              in: formData
+ *              required: true
+ *              type: string 
+ *          -   name: code
+ *              description: enter sms code recived
+ *              in: formData
+ *              required: true
+ *              type: string   
+ *          responses:
+ *              201: 
+ *                  description: Success
+ *              400: 
+ *                  description: Bad Request
+ *              401: 
+ *                  description: Unauthorization
+ *              500: 
+ *                  description: Internal Server Error 
+ */
+router.post("/check-otp", userAuthController.checkOtp)
+
 
 module.exports ={
     userAuthRoutes : router
