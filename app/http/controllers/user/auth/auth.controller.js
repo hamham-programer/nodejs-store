@@ -1,9 +1,11 @@
 const {getOtpSchema,checkOtpSchema} = require("../../../validators/user/auth.schema")
-const {RandomNumberGenrator,SiginAccesToken} = require("../../../../utils/functions")
+const {RandomNumberGenrator,SiginAccesToken,SiginrefreshToken, VerifyrefreshToken} = require("../../../../utils/functions")
 const {UserModel} = require("./../../../../models/users")
-const {EXPIRES_IN,USER_ROLE} = require("../../../../utils/constans")
+const {EXPIRES_IN,ROLES} = require("../../../../utils/constans")
 const Controller = require("../../controller")
 const createError = require("http-errors")
+const redisClient = require("../../../../utils/init_redis")
+
  class userAuthController extends Controller{
     async getOtp(req,res,next){
         try {
@@ -36,9 +38,12 @@ const createError = require("http-errors")
             const now = Date.now()
             if(+user.otp.expiresIn < now)throw createError.Unauthorized("کد شما منقضی شده است")
             const accesstoken = await SiginAccesToken(user._id)
+            const refreshToken = await SiginrefreshToken(user._id)
+
             return res.json({
                 data:{
                     accesstoken,
+                    refreshToken,
                     user
                 }
             })  
@@ -47,12 +52,30 @@ const createError = require("http-errors")
             next(error)
         }
     }
+    async refreshToken(req,res,next){
+        try {
+            const {refreshToken} = req.body
+            const mobile = await VerifyrefreshToken(refreshToken)
+            const user = await UserModel.findOne({mobile})
+            const accessToken = await SiginAccesToken(user._id)
+            const newrefreshToken = await SiginrefreshToken(user._id)
+            return res.json({
+                data: {
+                    accessToken,
+                    refreshToken: newrefreshToken
+                }
+            })
+        } catch (error) {
+            next(error)
+            
+        }
+    }
 
 
     async saveUser(mobile, code){
         let otp = {
             code,
-            expiresIn: EXPIRES_IN
+            expiresIn: (new Date().getTime()+ 120000)
         }
         const result = await this.checkExistUser(mobile)
         if(result){
@@ -63,7 +86,7 @@ const createError = require("http-errors")
         return (await UserModel.create({
             mobile,
             otp,
-            Roles: [USER_ROLE]
+            Roles: [Roles.USER]
         }))
     }
     async checkExistUser(mobile){

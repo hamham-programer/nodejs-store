@@ -15,6 +15,7 @@ module.exports = class Application{
         this.#PORT = PORT;
         this.#DB_URL = DB_URL;
         this.configApplication();
+        this.initRedis();
         this.connectToMongoDB();
         this.createServer();
         this.createRoutes();
@@ -75,6 +76,9 @@ module.exports = class Application{
             await mongoose.connection.close()
             process.exit(0)
         })
+    }
+    initRedis(){
+        require("./utils/init_redis")
     }
     createRoutes(){
         this.#app.use(AllRoutes)
