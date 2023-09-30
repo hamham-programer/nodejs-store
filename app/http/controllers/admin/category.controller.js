@@ -1,7 +1,7 @@
 const Controller = require("../controller")
 const {categoryModel} = require("./../../../models/categories")
 const createError = require("http-errors")
-const {addCategorySchema} = require("../../validators/admin/category.Schema")
+const {addCategorySchema, updateCategorySchema} = require("../../validators/admin/category.Schema")
 const mongoose = require ("mongoose")
 
 class categoryController extends Controller {
@@ -70,8 +70,20 @@ class categoryController extends Controller {
             
         }
     }
-    editCategory(req,res,next){
+    async editCategory(req,res,next){
         try {
+            const {id} = req.params
+            const {title} = req.body
+            const category = await this.checkExistCategory(id)
+            await updateCategorySchema.validateAsync(req.body)
+            const resultOfUpdate = await categoryModel.updateOne({_id:id}, {$set: {title}})
+            if(resultOfUpdate.modifiedCount == 0) throw createError.InternalServerError("بروزرسانی انجام نشد")
+            return res.status(200).json({
+                data:{
+                    statusCode: 200,
+                     message:"بروزرسانی با موفقیت  انجام شد"
+                }
+            })
             
         } catch (error) {
             next(error)
@@ -101,7 +113,7 @@ class categoryController extends Controller {
                     }
                 }
             ]) */
-            const category = await categoryModel.aggregate([
+/*             const category = await categoryModel.aggregate([
                 {
                     $graphLookup : {
                         from: "categories",
@@ -124,7 +136,8 @@ class categoryController extends Controller {
                         parent: undefined
                     }
                 }
-            ])
+            ]) */
+            const category = await categoryModel.find({parent:undefined})
             return res.status(200).json({
                 data:{
                     statusCode:200,
@@ -196,6 +209,23 @@ class categoryController extends Controller {
                 data:{
                     statusCode:200,
                     children
+                }
+            })
+            
+        } catch (error) {
+            next(error)
+            
+        }
+    }
+    async getAllCategorywithoutPopulate(req,res,next){
+        try {
+            const categories = await categoryModel.aggregate([{
+                $match:{}
+            }])
+            return res.status(200).json({
+                data:{
+                    statusCode:200,
+                    categories
                 }
             })
             
