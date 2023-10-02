@@ -34,10 +34,9 @@ const storage = multer.diskStorage({
             return cb (null, true)
         }
            return cb (createError.BadRequest("فرمت ارسالی تصویر صحیح نمی باشد"))
-
-
     }
-const uploadFile = multer({storage, fileFilter})
+    const maxSize = 1* 1000 * 1000 //1mb 
+    const uploadFile = multer({storage, fileFilter, limits: {fileSize: maxSize}})
 module.exports ={
     uploadFile
 }

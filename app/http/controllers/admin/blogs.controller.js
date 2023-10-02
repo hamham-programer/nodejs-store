@@ -12,9 +12,16 @@ class blogController extends Controller{
             const blogDataBody =await createBlogSchema.validateAsync(req.body)
             req.body.image = (path.join(blogDataBody.fileUploadPath, blogDataBody.filename)).replace(/\\/gi, "/")
             const {title, text, short_text, categort, tags} = blogDataBody 
-            const {image} = req.body.image
-            const Blog = await BlogModel.create({title, image, text, short_text, categort, tags})
-            return res.json({blogDataBody, image:req.body.image})
+            const image = req.body.image
+            const author = req.user._id
+            const Blog = await BlogModel.create({title, image, text, short_text, categort, tags, author})
+            return res.status(201).json({
+                data:{
+                    statusCode: 201,
+                    message: "ایجاد بلاگ با موفقیت انجام شد"
+                }
+
+            })
             
         } catch (error) {
             deleteFileInPublic(req.body.image)
@@ -23,6 +30,12 @@ class blogController extends Controller{
     }
     async getOneBlogById(req,res,next){
         try {
+            return res.status(201).json({
+                data:{
+                    statusCode: 201,
+                    
+                }
+            })
             
         } catch (error) {
             next(error)            
@@ -30,10 +43,33 @@ class blogController extends Controller{
     }
     async getListOfBlogs(req,res,next){
         try {
+    //        const blogs = await BlogModel.find({})
+           const blogs = await BlogModel.aggregate([
+                {$match: {}},
+                {
+                    $lookup:{
+                    from: "users",
+                    localField: "author",
+                    foreignField: "_id",
+                    as: "author"
+                }},
+                {
+                    $unwind: "$author"
+                },
+                {
+                    $project: {
+                       "author.Roles": 0,
+                       "author.bills": 0,
+                       "author.otp": 0
+
+                    }
+                }
+        
+           ])
             return res.status(200).json({
-                statusCode: 200,
                 data:{
-                    blogs: []
+                    statusCode: 200,
+                    blogs
                 }
             })
             
