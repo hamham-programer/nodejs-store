@@ -19,6 +19,11 @@ const Schema = new mongoose.Schema({
 
 
 
+},{
+    timestamps: true,
+    toJSON:{
+        virtual: true
+    }
 });
 module.exports = {
     UserModel : mongoose.model ("user", Schema)

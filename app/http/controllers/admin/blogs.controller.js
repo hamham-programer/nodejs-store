@@ -2,6 +2,7 @@ const Controller = require("../controller")
 const {createBlogSchema} = require("../../validators/admin/blog.schema")
 const {deleteFileInPublic} = require("../../../utils/functions")
 const {BlogModel} = require("./../../../models/blogs")
+const createError = require("http-errors")
 
 const path = require("path")
 
@@ -28,8 +29,23 @@ class blogController extends Controller{
             next(error)            
         }
     }
+    async findBlog(id) {
+        const blog = await BlogModel.findById(id).populate([{path: "category", select: ["title"]}, {path: "author", select: ["mobile", "first_name", "last_name", "username"]}])
+        if(!blog) throw createError.NotFound("مقاله ای یافت نشد")
+        
+        return blog
+    }
     async getOneBlogById(req,res,next){
         try {
+            const {id} = req.params
+            const blog = await this.findBlog({_id:id})
+            return res.status(200).json({
+                data:{
+                    statusCode:200,
+                    blog
+                }
+            })
+
             return res.status(201).json({
                 data:{
                     statusCode: 201,
@@ -86,7 +102,16 @@ class blogController extends Controller{
     }
     async deleteBlogById(req,res,next){
         try {
-            
+            const {id} = req.params
+            await this.findBlog(id)
+            const result = await BlogModel.deleteOne({_id: id})
+            if(result.deleteCount == 0) throw createError.InternalServerError("حذف انجام نشد")
+            return res.status(200).json({
+                data:{
+                    statusCode:200,
+                    message: "مقاله با موفقیت حذف شد"
+                }
+            })
         } catch (error) {
             next(error)            
         }
