@@ -15,15 +15,23 @@ function createRoutes(req) {
 }
 const storage = multer.diskStorage({
     destination: (req,file,cb) =>{
-        const filePath = createRoutes(req)
-        cb(null, filePath)
+        if(file?.originalname){
+            const filePath = createRoutes(req)
+            return cb(null, filePath)
+
+        }
+        cb(null, null)
     },
     filename: (req,file,cb) =>{
-        console.log(file);
-        const ext = path.extname(file.originalname)
-        const fileName = String(new Date().getTime()+ ext)
-        req.body.filename = fileName
-        cb(null, fileName)
+        if(file?.originalname){
+            console.log(file);
+            const ext = path.extname(file.originalname)
+            const fileName = String(new Date().getTime()+ ext)
+            req.body.filename = fileName
+            return cb(null, fileName)
+        }
+        cb(null,null)
+
         
     }
 })

@@ -12,7 +12,7 @@ const router = require ("express").Router()
  *              -   in: header
  *                  name: access-token
  *                  example: Bearer <token>
- *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjI1MTQ5MiwiZXhwIjoxNjk2MjU1MDkyfQ.vMN9UUKNnBD2yw_3qJpwqc-xQEAKYUzTrPQxwQol6Yg
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjMzMDkwOCwiZXhwIjoxNjk2MzM0NTA4fQ.W4eE36LUGSRtsOCbgdLWT3067TCHHsdxIHAV3MFvieA
  *                  type: string
  *                  required: true
  *          responses:
@@ -33,7 +33,7 @@ router.get("/", AdminBlogController.getListOfBlogs)
  *              -   in: header
  *                  name: access-token
  *                  example: Bearer <token>
- *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjI1MTQ5MiwiZXhwIjoxNjk2MjU1MDkyfQ.vMN9UUKNnBD2yw_3qJpwqc-xQEAKYUzTrPQxwQol6Yg
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjMzMDkwOCwiZXhwIjoxNjk2MzM0NTA4fQ.W4eE36LUGSRtsOCbgdLWT3067TCHHsdxIHAV3MFvieA
  *                  type: string
  *                  required: true
  *              -   in: formData
@@ -79,8 +79,7 @@ router.post("/add",uploadFile.single("image"),stringToArray("tags"), AdminBlogCo
  *              -   in: header
  *                  name: access-token
  *                  example: Bearer <token>
- *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjI1MTQ5MiwiZXhwIjoxNjk2MjU1MDkyfQ.vMN9UUKNnBD2yw_3qJpwqc-xQEAKYUzTrPQxwQol6Yg
- *                  type: string
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjMzMDkwOCwiZXhwIjoxNjk2MzM0NTA4fQ.W4eE36LUGSRtsOCbgdLWT3067TCHHsdxIHAV3MFvieA
  *                  required: true
  *              -   in: path    
  *                  name: id
@@ -101,7 +100,7 @@ router.get("/:id", AdminBlogController.getOneBlogById)
  *              -   in: header
  *                  name: access-token
  *                  example: Bearer <token>
- *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjI1MTI0OSwiZXhwIjoxNjk2MjU0ODQ5fQ.cW19zwJQZ2YS2B3KbvzLDM_1XLYebfOzV4pgNWHXnQ0
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjMzMDkwOCwiZXhwIjoxNjk2MzM0NTA4fQ.W4eE36LUGSRtsOCbgdLWT3067TCHHsdxIHAV3MFvieA
  *                  type: string
  *                  required: true
  *              -   in: path    
@@ -113,6 +112,49 @@ router.get("/:id", AdminBlogController.getOneBlogById)
  *                  description: success
  */
 router.delete("/:id", AdminBlogController.deleteBlogById)
+/**
+ * @swagger
+ *  /admin/blogs/update/{id}:
+ *      patch:
+ *          tags: [Blog(Admin-Panel)]
+ *          summary: update blogs document by id
+ *          consumes:
+ *              -   multipart/form-data
+ *              -   application/x-www-form-data-urlencoded
+ *          parameters:
+ *              -   in: header
+ *                  name: access-token
+ *                  example: Bearer <token>
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjMzMDkwOCwiZXhwIjoxNjk2MzM0NTA4fQ.W4eE36LUGSRtsOCbgdLWT3067TCHHsdxIHAV3MFvieA
+ *                  type: string
+ *              -   in: formData
+ *                  name: title
+ *                  type: string 
+ *              -   in: path
+ *                  name: id
+ *                  type: string 
+ *                  required: true
+ *              -   in: formData
+ *                  name: text
+ *                  type: string 
+ *              -   in: formData
+ *                  name: short_text
+ *                  type: string   
+ *              -   in: formData
+ *                  name: tags
+ *                  example: tag1#tag2#tag3_foo#foo_bar || str || undefined
+ *                  type: string 
+ *              -   in: formData
+ *                  name: category
+ *                  type: string  
+ *              -   in: formData
+ *                  name: image
+ *                  type: file  
+ *          responses:
+ *              201:
+ *                  description: success created                
+ */
+router.patch("/update/:id",uploadFile.single("image"),stringToArray("tags"), AdminBlogController.updateBlogById)
 module.exports ={
     BlogAdminApiRoutes: router
 }
