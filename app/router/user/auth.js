@@ -61,23 +61,22 @@ const router = require("express").Router()
  */
 router.post("/get-otp", userAuthController.getOtp)
 /**
+/**
  * @swagger
  *  /user/check-otp:
  *      post:
  *          tags : [User-Authentication]
  *          summary: chack-otp value in user controller
  *          description: chack otp with codce- mobile and expires date
- *          parameters:
- *          -   name: mobile
- *              description: fa-IRI phonenumber
- *              in: formData
+ *          requestBody:
  *              required: true
- *              type: string 
- *          -   name: code
- *              description: enter sms code recived
- *              in: formData
- *              required: true
- *              type: string   
+ *              content:
+ *                  application/x-www-form-urlencoded:
+ *                      schema:
+ *                          $ref: '#/components/schemas/CheckOTP'
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/CheckOTP'
  *          responses:
  *              201: 
  *                  description: Success

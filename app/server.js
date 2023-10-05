@@ -41,11 +41,22 @@ module.exports = class Application{
                         email: "hamidreza2332@gmail.com"
                     },
                 },
+                servers: [
+                    {url: "http://localhost:4000"},
+                    {url: "http://localhost:5000"}
+                ],
+                components : {
+                    securitySchemes : {
+                        BearerAuth : {
+                            type: "http",
+                            scheme: "bearer",
+                            bearerFormat: "JWT"
+                        }
+                    }
+                },
+                    security: [{BearerAuth: []}]
             },
-            servers: [
-                {url: "http://localhost:4000"},
-                {url: "http://localhost:5000"}
-            ],
+
             apis: ["./app/router/**/*.js"],
         }),
             {explorer: true}

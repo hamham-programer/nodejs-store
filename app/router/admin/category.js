@@ -2,28 +2,39 @@ const {categoryController}= require("../../http/controllers/admin/category.contr
 const router = require("express").Router()
 /**
  * @swagger
- *  /admin/category/add/:
+ *  components:
+ *      schemas:
+ *          Category:
+ *              type: object
+ *              required:
+ *                  -   title
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: the title of category
+ *                  parent:
+ *                      type: string
+ *                      description: the title of category
+ */
+
+/**
+ * @swagger
+ *  /admin/category/add:
  *      post:
- *          tags: [Category(Admin-Panel)]
+ *          tags: [Category(AdminPanel)]
  *          summary: create new category title
- *          parameters:
- *              -   in: header
- *                  name: access-token
- *                  example: Bearer <token>
- *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
- *                  type: string
- *                  required: true
- *              -   in: formData
- *                  type: string
- *                  required: true
- *                  name: title
- *              -   in: formData
- *                  type: string
- *                  required: false
- *                  name: parent
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/x-www-form-urlencoded:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Category'
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Category'
  *          responses:
  *              201:
- *                  description: success        
+ *                  description: success
  */
 router.post("/add", categoryController.addCategory)
 /**
@@ -41,15 +52,15 @@ router.get("/parents",categoryController.getAllParents)
  * @swagger
  *  /admin/category/children/{parent}:
  *      get:
- *          tags: [Category(Admin-Panel)]
- *          summary: get all parents of category
+ *          tags: [Category(AdminPanel)]
+ *          summary: get All children of Parents Category 
  *          parameters:
  *              -   in: path
+ *                  name: parent
  *                  type: string
  *                  required: true
- *                  name: parent
  *          responses:
- *              201:
+ *              200:
  *                  description: success
  */
 router.get("/children/:parent",categoryController.getChildOfParents)
@@ -58,10 +69,10 @@ router.get("/children/:parent",categoryController.getChildOfParents)
  * @swagger
  *  /admin/category/parents:
  *      get:
- *          tags: [Category(Admin-Panel)]
- *          summary: get all children of category
+ *          tags: [Category(AdminPanel)]
+ *          summary: get All parents of Category or Category Heads
  *          responses:
- *              201:
+ *              200:
  *                  description: success
  */
 router.get("/parents",categoryController.getAllParents)
@@ -69,10 +80,10 @@ router.get("/parents",categoryController.getAllParents)
  * @swagger
  *  /admin/category/all:
  *      get:
- *          tags: [Category(Admin-Panel)]
- *          summary: get all category
+ *          tags: [Category(AdminPanel)]
+ *          summary: get All Categories 
  *          responses:
- *              201:
+ *              200:
  *                  description: success
  */
 router.get("/all",categoryController.getAllCategory)
@@ -80,15 +91,15 @@ router.get("/all",categoryController.getAllCategory)
  * @swagger
  *  /admin/category/remove/{id}:
  *      delete:
- *          tags: [Category(Admin-Panel)]
- *          summary: remove category by id
+ *          tags: [Category(AdminPanel)]
+ *          summary: remove category with object-id
  *          parameters:
  *              -   in: path
+ *                  name: id
  *                  type: string
- *                  required: true
- *                  name: id 
+ *                  required : true
  *          responses:
- *              201:
+ *              200:
  *                  description: success
  */
 router.delete("/remove/:id",categoryController.removeCategory)
@@ -96,10 +107,10 @@ router.delete("/remove/:id",categoryController.removeCategory)
  * @swagger
  *  /admin/category/list-of-all:
  *      get:
- *          tags: [Category(Admin-Panel)]
- *          summary: get all category without populate and nested structure
+ *          tags: [Category(AdminPanel)]
+ *          summary: get all categories without populate and nested structure
  *          responses:
- *              201:
+ *              200:
  *                  description: success
  */
 router.get("/list-of-all",categoryController.getAllCategorywithoutPopulate)
@@ -107,15 +118,15 @@ router.get("/list-of-all",categoryController.getAllCategorywithoutPopulate)
  * @swagger
  *  /admin/category/{id}:
  *      get:
- *          tags: [Category(Admin-Panel)]
- *          summary: find category by id
+ *          tags: [Category(AdminPanel)]
+ *          summary: find category by object-id
  *          parameters:
  *              -   in: path
+ *                  name: id
  *                  type: string
- *                  required: true
- *                  name: id 
+ *                  required : true
  *          responses:
- *              201:
+ *              200:
  *                  description: success
  */
 router.get("/:id",categoryController.getCategoryById)
@@ -123,22 +134,27 @@ router.get("/:id",categoryController.getCategoryById)
  * @swagger
  *  /admin/category/update/{id}:
  *      patch:
- *          tags: [Category(Admin-Panel)]
- *          summary: edit or update category by id
+ *          tags: [Category(AdminPanel)]
+ *          summary: edit or update category title with object id
  *          parameters:
  *              -   in: path
+ *                  name: id
  *                  type: string
- *                  required: true
- *                  name: id 
- *              -   in: formData
- *                  type: string
- *                  required: true
- *                  name: title                
+ *                  required : true
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/x-www-form-urlencoded:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Category'
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Category'
  *          responses:
  *              200:
  *                  description: success
- *              500:
- *                  description: internalServerError
+ *              500:    
+ *                  description: internalServerErorr
  */
 router.patch("/update/:id",categoryController.editCategory)
 

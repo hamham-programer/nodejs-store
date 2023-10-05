@@ -4,7 +4,7 @@ const { ACCESS_TOKEN_SECRET_KEY} = require("../../utils/constans");
 const {UserModel} = require("../../models/users");
 
 function getToken(headers){
-    const [bearer, token] = headers?.["access-token"]?.split(" ") || []
+    const [bearer, token] = headers?.authorization?.split(" ") || []
     if(token && ["Bearer", "bearer"].includes(bearer)) return token
     throw createError.Unauthorized("حساب کاربری جهت ورود یافت نشد")
 }
