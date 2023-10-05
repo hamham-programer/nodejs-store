@@ -1,6 +1,33 @@
 const {userAuthController} = require ("../../http/controllers/user/auth/auth.controller")
 const router = require("express").Router()
-/* *
+
+/**
+ * @swagger
+ *  components:
+ *      schemas:
+ *          GetOTP:
+ *              type: object
+ *              required:
+ *                  -   mobile
+ *              properties:
+ *                  mobile:
+ *                      type: string
+ *                      description: the user mobile for signup/signin
+ *          CheckOTP:
+ *              type: object
+ *              required:
+ *                  -   mobile
+ *                  -   code
+ *              properties:
+ *                  mobile:
+ *                      type: string
+ *                      description: the user mobile for signup/signin
+ *                  code:
+ *                      type: integer
+ *                      description: reviced code from getOTP 
+ */
+ 
+/**
  * @swagger
  *  tags:
  *      -name : User-Authentication
@@ -13,12 +40,15 @@ const router = require("express").Router()
  *          tags: [User-Authentication]
  *          summary: login user in userpanel with phone number
  *          description: one time password(otp) login
- *          parameters:
- *          -   name: mobile
- *              description: fa-IRI phonenumber
- *              in: formData
+ *          requestBody:
  *              required: true
- *              type: string
+ *              content:
+ *                  application/x-www-form-urlencoded:
+ *                       schema: 
+ *                           $ref: '#/components/schemas/GetOTP'
+ *                  application/json:
+ *                       schema: 
+ *                           $ref: '#/components/schemas/GetOTP'
  *          responses:
  *              201:
  *                  description: Succsee    

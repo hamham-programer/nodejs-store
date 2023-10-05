@@ -1,0 +1,416 @@
+const {userAuthController} = require ("../../http/controllers/user/auth/auth.controller")
+const router = require("express").Router()
+/**
+ * @swagger
+ *  components:
+ *       schemas:
+ *          GetOTP:
+ *              type: object
+ *              required:
+ *                  -   mobile
+ *              properties:
+ *                  mobile:
+ *                       type: string
+ *                       description: them user mobile for siginup/sigin 
+ *          checkOTP:
+ *              type: object
+ *              required:
+ *                  - mobile
+ *                  - code
+ *              properties:
+ *                  mobile:
+ *                        type: string
+ *                        description: them user mobile for siginup/sigin 
+ *                    code:
+ *                        type: integer
+ *                        description: recive code from get otp
+ */
+/**
+ * @swagger
+ *  tags:
+ *      -name : User-Authentication
+ *      description : user-auth section
+ */
+/**
+ * @swagger
+ *  /user/get-otp:
+ *      post:
+ *          tags: [User-Authentication]
+ *          summary: login user in userpanel with phone number
+ *          description: one time password(otp) login
+ *          parameters:
+ *          -   name: mobile
+ *              description: fa-IRI phonenumber
+ *              in: formData
+ *              required: true
+ *              type: string
+ *          responses:
+ *              201:
+ *                  description: Succsee    
+ *              400:
+ *                  description : Bad Request
+ *              401:
+ *                  description: Unauthorization
+ *              500:
+ *                  description: Internal server error
+ */
+router.post("/get-otp", userAuthController.getOtp)
+/**
+ * @swagger
+ *  /user/check-otp:
+ *      post:
+ *          tags : [User-Authentication]
+ *          summary: chack-otp value in user controller
+ *          description: chack otp with codce- mobile and expires date
+ *          parameters:
+ *          -   name: mobile
+ *              description: fa-IRI phonenumber
+ *              in: formData
+ *              required: true
+ *              type: string 
+ *          -   name: code
+ *              description: enter sms code recived
+ *              in: formData
+ *              required: true
+ *              type: string   
+ *          responses:
+ *              201: 
+ *                  description: Success
+ *              400: 
+ *                  description: Bad Request
+ *              401: 
+ *                  description: Unauthorization
+ *              500: 
+ *                  description: Internal Server Error 
+ */
+router.post("/check-otp", userAuthController.checkOtp)
+/**
+ * @swagger
+ *  /user/refresh-token:
+ *      post:
+ *          tags : [User-Authentication]    
+ *          summary: send refresh token
+ *          description: new token
+ *          parameters:
+ *              -   in: formData
+ *                  type: string 
+ *                  required: true
+ *                  name: refreshToken
+ *          responses:
+ *              200:
+ *                  description: Success
+ * 
+ */
+router.post("/refresh-token", userAuthController.refreshToken)
+
+
+
+module.exports ={
+    userAuthRoutes : router
+}
+---------------------------------------------------------------------------
+const {AdminBlogController}= require("../../http/controllers/admin/blogs.controller")
+const { stringToArray } = require("../../http/middlewares/stringToarray");
+const { uploadFile } = require("../../utils/multer");
+const router = require ("express").Router()
+/**
+ * @swagger
+ *  /admin/blogs:
+ *      get:
+ *          tags: [Blog(Admin-Panel)]
+ *          summary: get all blogs
+ *          parameters:
+ *              -   in: header
+ *                  name: access-token
+ *                  example: Bearer <token>
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
+ *                  required: true
+ *          responses:
+ *              200:
+ *                  description: success                 
+ */
+router.get("/", AdminBlogController.getListOfBlogs)
+/**
+ * @swagger
+ *  /admin/blogs/add:
+ *      post:
+ *          tags: [Blog(Admin-Panel)]
+ *          summary: create blogs document
+ *          consumes:
+ *              -   multipart/form-data
+ *              -   application/x-www-form-data-urlencoded
+ *          parameters:
+ *              -   in: header
+ *                  name: access-token
+ *                  example: Bearer <token>
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
+ *                  required: true
+ *              -   in: formData
+ *                  name: title
+ *                  type: string 
+ *                  required: true   
+ *              -   in: formData
+ *                  name: text
+ *                  type: string 
+ *                  required: true   
+ *              -   in: formData
+ *                  name: short_text
+ *                  type: string  
+ *                  required: true   
+ *              -   in: formData
+ *                  name: title
+ *                  type: string  
+ *                  required: true   
+ *              -   in: formData
+ *                  name: tags
+ *                  example: tag1#tag2#tag3_foo#foo_bar || str || undefined
+ *                  type: string 
+ *              -   in: formData
+ *                  name: category
+ *                  type: string  
+ *                  required: true
+ *              -   in: formData
+ *                  name: image
+ *                  type: file  
+ *                  required: true      
+ *          responses:
+ *              201:
+ *                  description: success created                
+ */
+router.post("/add",uploadFile.single("image"),stringToArray("tags"), AdminBlogController.createBlog)
+/**
+ * @swagger
+ *  /admin/blogs/{id}:
+ *       get:
+ *          tags: [Blog(Admin-Panel)]
+ *          summary: get blog by id and populate this field
+ *          parameters:
+ *              -   in: header
+ *                  name: access-token
+ *                  example: Bearer <token>
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
+ *                  required: true
+ *              -   in: path    
+ *                  name: id
+ *                  type: string
+ *                  required: true
+ *          responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/:id", AdminBlogController.getOneBlogById)
+/**
+ * @swagger
+ *  /admin/blogs/{id}:
+ *       delete:
+ *          tags: [Blog(Admin-Panel)]
+ *          summary: remove blog by id and populate this field
+ *          parameters:
+ *              -   in: header
+ *                  name: access-token
+ *                  example: Bearer <token>
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
+ *                  type: string
+ *                  required: true
+ *              -   in: path    
+ *                  name: id
+ *                  type: string
+ *                  required: true
+ *          responses:
+ *              200:
+ *                  description: success
+ */
+router.delete("/:id", AdminBlogController.deleteBlogById)
+/**
+ * @swagger
+ *  /admin/blogs/update/{id}:
+ *      patch:
+ *          tags: [Blog(Admin-Panel)]
+ *          summary: update blogs document by id
+ *          consumes:
+ *              -   multipart/form-data
+ *              -   application/x-www-form-data-urlencoded
+ *          parameters:
+ *              -   in: header
+ *                  name: access-token
+ *                  example: Bearer <token>
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
+ *                  type: string
+ *              -   in: formData
+ *                  name: title
+ *                  type: string 
+ *              -   in: path
+ *                  name: id
+ *                  type: string 
+ *                  required: true
+ *              -   in: formData
+ *                  name: text
+ *                  type: string 
+ *              -   in: formData
+ *                  name: short_text
+ *                  type: string   
+ *              -   in: formData
+ *                  name: tags
+ *                  example: tag1#tag2#tag3_foo#foo_bar || str || undefined
+ *                  type: string 
+ *              -   in: formData
+ *                  name: category
+ *                  type: string  
+ *              -   in: formData
+ *                  name: image
+ *                  type: file  
+ *          responses:
+ *              201:
+ *                  description: success created                
+ */
+router.patch("/update/:id",uploadFile.single("image"),stringToArray("tags"), AdminBlogController.updateBlogById)
+module.exports ={
+    BlogAdminApiRoutes: router
+}------------------------------------------------------------------------------------------
+const {categoryController}= require("../../http/controllers/admin/category.controller")
+const router = require("express").Router()
+/**
+ * @swagger
+ *  /admin/category/add/:
+ *      post:
+ *          tags: [Category(Admin-Panel)]
+ *          summary: create new category title
+ *          parameters:
+ *              -   in: header
+ *                  name: access-token
+ *                  example: Bearer <token>
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
+ *                  type: string
+ *                  required: true
+ *              -   in: formData
+ *                  type: string
+ *                  required: true
+ *                  name: title
+ *              -   in: formData
+ *                  type: string
+ *                  required: false
+ *                  name: parent
+ *          responses:
+ *              201:
+ *                  description: success        
+ */
+router.post("/add", categoryController.addCategory)
+/**
+ * @swagger
+ *  /admin/category/parents:
+ *      get:
+ *          tags: [Category(Admin-Panel)]
+ *          summary: get all parents of category
+ *          responses:
+ *              201:
+ *                  description: success
+ */
+router.get("/parents",categoryController.getAllParents)
+/**
+ * @swagger
+ *  /admin/category/children/{parent}:
+ *      get:
+ *          tags: [Category(Admin-Panel)]
+ *          summary: get all parents of category
+ *          parameters:
+ *              -   in: path
+ *                  type: string
+ *                  required: true
+ *                  name: parent
+ *          responses:
+ *              201:
+ *                  description: success
+ */
+router.get("/children/:parent",categoryController.getChildOfParents)
+
+/**
+ * @swagger
+ *  /admin/category/parents:
+ *      get:
+ *          tags: [Category(Admin-Panel)]
+ *          summary: get all children of category
+ *          responses:
+ *              201:
+ *                  description: success
+ */
+router.get("/parents",categoryController.getAllParents)
+/**
+ * @swagger
+ *  /admin/category/all:
+ *      get:
+ *          tags: [Category(Admin-Panel)]
+ *          summary: get all category
+ *          responses:
+ *              201:
+ *                  description: success
+ */
+router.get("/all",categoryController.getAllCategory)
+/**
+ * @swagger
+ *  /admin/category/remove/{id}:
+ *      delete:
+ *          tags: [Category(Admin-Panel)]
+ *          summary: remove category by id
+ *          parameters:
+ *              -   in: path
+ *                  type: string
+ *                  required: true
+ *                  name: id 
+ *          responses:
+ *              201:
+ *                  description: success
+ */
+router.delete("/remove/:id",categoryController.removeCategory)
+/**
+ * @swagger
+ *  /admin/category/list-of-all:
+ *      get:
+ *          tags: [Category(Admin-Panel)]
+ *          summary: get all category without populate and nested structure
+ *          responses:
+ *              201:
+ *                  description: success
+ */
+router.get("/list-of-all",categoryController.getAllCategorywithoutPopulate)
+/**
+ * @swagger
+ *  /admin/category/{id}:
+ *      get:
+ *          tags: [Category(Admin-Panel)]
+ *          summary: find category by id
+ *          parameters:
+ *              -   in: path
+ *                  type: string
+ *                  required: true
+ *                  name: id 
+ *          responses:
+ *              201:
+ *                  description: success
+ */
+router.get("/:id",categoryController.getCategoryById)
+/**
+ * @swagger
+ *  /admin/category/update/{id}:
+ *      patch:
+ *          tags: [Category(Admin-Panel)]
+ *          summary: edit or update category by id
+ *          parameters:
+ *              -   in: path
+ *                  type: string
+ *                  required: true
+ *                  name: id 
+ *              -   in: formData
+ *                  type: string
+ *                  required: true
+ *                  name: title                
+ *          responses:
+ *              200:
+ *                  description: success
+ *              500:
+ *                  description: internalServerError
+ */
+router.patch("/update/:id",categoryController.editCategory)
+
+module.exports ={
+    categoryRoutes: router
+}

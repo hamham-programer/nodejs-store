@@ -30,7 +30,7 @@ module.exports = class Application{
         this.#app.use(express.static(path.join(__dirname,"..","public")))
         this.#app.use("/api-doc",swaggerUI.serve,swaggerUI.setup(swaggerJsDoc({
             swaggerDefinition:{
-                opeanapi: "3.0.0",
+                 openapi: "3.0.0",
                 info:{
                     title: "modalall++",
                     version: "2.0.0",
@@ -47,7 +47,9 @@ module.exports = class Application{
                 {url: "http://localhost:5000"}
             ],
             apis: ["./app/router/**/*.js"],
-        })))
+        }),
+            {explorer: true}
+        ))
     }
     createServer(){
         const http = require("http")

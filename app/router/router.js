@@ -3,6 +3,7 @@ const {HomeRoutes} = require("./api");
 const {userAuthRoutes} = require("./user/auth");
 const {DeveloperRoutes} = require("./developer.routes");
 const {AdminRoutes} = require("./admin/admin.routes");
+const { VerifyAccessToken, checkRole } = require("../http/middlewares/verifyAccessToken");
 (async() =>{
     redisClient.set("key","value")
     const value = await redisClient.get("key")
@@ -11,7 +12,7 @@ const {AdminRoutes} = require("./admin/admin.routes");
 
 const router = require("express").Router()
 router.use("/user", userAuthRoutes)
-router.use("/admin", AdminRoutes)
+router.use("/admin", VerifyAccessToken,checkRole("ADMIN"), AdminRoutes)
 router.use("/developer", DeveloperRoutes)
 router.use("/", HomeRoutes)
 module.exports ={

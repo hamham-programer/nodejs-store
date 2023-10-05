@@ -7,6 +7,12 @@ const router = require("express").Router()
  *          tags: [Category(Admin-Panel)]
  *          summary: create new category title
  *          parameters:
+ *              -   in: header
+ *                  name: access-token
+ *                  example: Bearer <token>
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
+ *                  type: string
+ *                  required: true
  *              -   in: formData
  *                  type: string
  *                  required: true

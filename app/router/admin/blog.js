@@ -12,8 +12,7 @@ const router = require ("express").Router()
  *              -   in: header
  *                  name: access-token
  *                  example: Bearer <token>
- *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjMzMDkwOCwiZXhwIjoxNjk2MzM0NTA4fQ.W4eE36LUGSRtsOCbgdLWT3067TCHHsdxIHAV3MFvieA
- *                  type: string
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
  *                  required: true
  *          responses:
  *              200:
@@ -33,8 +32,7 @@ router.get("/", AdminBlogController.getListOfBlogs)
  *              -   in: header
  *                  name: access-token
  *                  example: Bearer <token>
- *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjMzMDkwOCwiZXhwIjoxNjk2MzM0NTA4fQ.W4eE36LUGSRtsOCbgdLWT3067TCHHsdxIHAV3MFvieA
- *                  type: string
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
  *                  required: true
  *              -   in: formData
  *                  name: title
@@ -79,7 +77,7 @@ router.post("/add",uploadFile.single("image"),stringToArray("tags"), AdminBlogCo
  *              -   in: header
  *                  name: access-token
  *                  example: Bearer <token>
- *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjMzMDkwOCwiZXhwIjoxNjk2MzM0NTA4fQ.W4eE36LUGSRtsOCbgdLWT3067TCHHsdxIHAV3MFvieA
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
  *                  required: true
  *              -   in: path    
  *                  name: id
@@ -100,7 +98,7 @@ router.get("/:id", AdminBlogController.getOneBlogById)
  *              -   in: header
  *                  name: access-token
  *                  example: Bearer <token>
- *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjMzMDkwOCwiZXhwIjoxNjk2MzM0NTA4fQ.W4eE36LUGSRtsOCbgdLWT3067TCHHsdxIHAV3MFvieA
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
  *                  type: string
  *                  required: true
  *              -   in: path    
@@ -125,7 +123,7 @@ router.delete("/:id", AdminBlogController.deleteBlogById)
  *              -   in: header
  *                  name: access-token
  *                  example: Bearer <token>
- *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjMzMDkwOCwiZXhwIjoxNjk2MzM0NTA4fQ.W4eE36LUGSRtsOCbgdLWT3067TCHHsdxIHAV3MFvieA
+ *                  value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NjQwMjI5NywiZXhwIjoxNjk2NDA1ODk3fQ.q8JAe8pmu1DccgHKfNakwLdQRYJl5Gt2_8oSADxMgHc
  *                  type: string
  *              -   in: formData
  *                  name: title
