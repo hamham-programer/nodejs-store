@@ -143,5 +143,5 @@ router.delete("/:id", AdminBlogController.deleteBlogById)
  */
 router.patch("/update/:id",uploadFile.single("image"),stringToArray("tags"), AdminBlogController.updateBlogById)
 module.exports ={
-    BlogAdminApiRoutes: router
+    AdminApiBlogtRouter: router
 }

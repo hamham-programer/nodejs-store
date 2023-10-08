@@ -1,4 +1,4 @@
-const {default:mongoose} : require("mongoose")
+const {default:mongoose} = require("mongoose")
 const { CommentSchema } = require ("./public.schema")
 const Schema = new mongoose.Schema({
     title: {type: String, required:true},
@@ -11,9 +11,9 @@ const Schema = new mongoose.Schema({
     likes: {type: [mongoose.Types.ObjectId], default:[]},
     deslikes: {type: [mongoose.Types.ObjectId], default:[]},
     bookmarks: {type: [mongoose.Types.ObjectId], default:[]},
-    price: {type: number,required:true},
-    discount: {type: number, default:0},
-    count: {type: number},
+    price: {type: Number, default:0},
+    discount: {type: Number, default:0},
+    count: {type: Number},
     type: {type: String, required:true}, //virtual || physical
     format: {type: String},
     supplier: {type: mongoose.Types.ObjectId, required:true},
