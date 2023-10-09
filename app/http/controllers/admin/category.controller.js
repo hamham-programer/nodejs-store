@@ -2,6 +2,7 @@ const Controller = require("../controller")
 const {categoryModel} = require("./../../../models/categories")
 const createError = require("http-errors")
 const {addCategorySchema, updateCategorySchema} = require("../../validators/admin/category.Schema")
+const {StatusCodes:HttpStatus} = require("http-status-code")
 const mongoose = require ("mongoose")
 
 class categoryController extends Controller {
@@ -11,9 +12,9 @@ class categoryController extends Controller {
             const {title,parent} = req.body
             const category = await categoryModel.create({title, parent})
             if(!category) throw createError.InternalServerError("خطایی در سمت سرور رخ داده است")
-            return res.status(201).json({
+            return res.status(HttpStatus.CREATED).json({
                 data:{
-                    statusCode:201,
+                    statusCode:HttpStatus.CREATED,
                     message: "دسته بندی با موفقیت ایجاد شد"
                 }
             })
@@ -34,9 +35,9 @@ class categoryController extends Controller {
             const category = await this.checkExistCategory(id)
             const categoryResult = await categoryModel.deleteOne({_id: category._id})
             if(categoryResult.deletedCount == 0) throw createError.InternalServerError("حذف دسته بندی انجام نشد")
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode:200,
+                    statusCode:HttpStatus.OK,
                     message:"حذف دسته بندی با موفقیت انجام شد"
                 }
             })
@@ -58,9 +59,9 @@ class categoryController extends Controller {
             })
 
             if(categoryResult.deletedCount == 0) throw createError.InternalServerError("حذف دسته بندی انجام نشد")
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode:200,
+                    statusCode:HttpStatus.OK,
                     message:"حذف دسته بندی با موفقیت انجام شد"
                 }
             })
@@ -78,9 +79,9 @@ class categoryController extends Controller {
             await updateCategorySchema.validateAsync(req.body)
             const resultOfUpdate = await categoryModel.updateOne({_id:id}, {$set: {title}})
             if(resultOfUpdate.modifiedCount == 0) throw createError.InternalServerError("بروزرسانی انجام نشد")
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode: 200,
+                    statusCode: HttpStatus.OK,
                      message:"بروزرسانی با موفقیت  انجام شد"
                 }
             })
@@ -138,9 +139,9 @@ class categoryController extends Controller {
                 }
             ]) */
             const category = await categoryModel.find({parent:undefined})
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode:200,
+                    statusCode:HttpStatus.OK,
                     category
                 }
             })
@@ -174,9 +175,9 @@ class categoryController extends Controller {
                 }
                
             ]) 
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode:200,
+                    statusCode:HttpStatus.OK,
                     category
                 }
             })   
@@ -189,9 +190,9 @@ class categoryController extends Controller {
     async getAllParents(req,res,next){
         try {
             const parents = await categoryModel.find({parent: undefined})
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data: {
-                    statusCode:200,
+                    statusCode:HttpStatus.OK,
                     parents
                 }
             })
@@ -205,9 +206,9 @@ class categoryController extends Controller {
         try {
             const {parent} = req.params
             const children = await categoryModel.find({parent},{__v:0, parent:0}) //پروجکشن براش ست میکنیم بعضی موارد رو نمایش نده 
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode:200,
+                    statusCode:HttpStatus.OK,
                     children
                 }
             })
@@ -222,9 +223,9 @@ class categoryController extends Controller {
             const categories = await categoryModel.aggregate([{
                 $match:{}
             }])
-            return res.status(200).json({
+            return res.status(HttpStatus.OK).json({
                 data:{
-                    statusCode:200,
+                    statusCode:HttpStatus.OK,
                     categories
                 }
             })

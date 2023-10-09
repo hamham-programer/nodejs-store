@@ -43,9 +43,11 @@ const router = require("express").Router()
  *                  count:
  *                      type: string
  *                      description: the count of product
- *                  image:
- *                      type: file
- *                      description: the image of product
+ *                  images:
+ *                      type: array
+ *                      items:
+ *                          type: string
+ *                          format: binary
  *                  height:
  *                      type: string
  *                      description: the height of product box
@@ -58,6 +60,10 @@ const router = require("express").Router()
  *                  length:
  *                      type: string
  *                      description: the length of product box
+ *                  type:
+ *                      type: string
+ *                      description: the type of product 
+ *                      example: virtual - physical
  */
 /**
  * @swagger
@@ -75,22 +81,57 @@ const router = require("express").Router()
  *              201:
  *                  description: create new product   
  */
-router.post("/add",uploadFile.single("image"),stringToArray("tags"), productController.addProduct),
+router.post("/add",uploadFile.array("images", 10),stringToArray("tags"), productController.addProduct),
 /**
  * @swagger
  *  /admin/products/list:
  *      get:
  *          tags: [product(Adminpanel)]
  *          summary: get all product
+ *          parameters:
+ *              -   in: query
+ *                  name: search
+ *                  type: string
+ *                  description: text for search  in title, text, short_text
  *          responses:
  *              200:
  *                  description: success  
  */
 router.get("/list", productController.getAllProducts)
 router.patch("/", productController.editProduct),
-router.delete("/", productController.removeProduct),
 router.get("/", productController.getAllProducts),
-router.get("/", productController.getOneProducts)
+/**
+ * @swagger
+ *  /admin/products/{id}:
+ *      get:
+ *          tags: [product(Adminpanel)]
+ *          summary: get one products
+ *          parameters:
+ *              -   in: path
+ *                  name: id
+ *                  type: string
+ *                  description: objectId of product
+ *          responses:
+ *              200:
+ *                  description: success
+ */
+router.get("/:id", productController.getOneProduct)
+/**
+ * @swagger
+ *  /admin/products/remove/{id}:
+ *      delete:
+ *          tags: [product(Adminpanel)]
+ *          summary: delete one products
+ *          parameters:
+ *              -   in: path
+ *                  name: id
+ *                  type: string
+ *                  description: objectId of product
+ *          responses:
+ *              200:
+ *                  description: success
+ */
+router.delete("/remove/:id", productController.removeProductById)
 
 module.exports = {
     AdminApiProductRouter : router

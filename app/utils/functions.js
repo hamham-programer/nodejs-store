@@ -70,11 +70,19 @@ function VerifyrefreshToken(token) {
        if(fs.existsSync(pathfile))   fs.unlinkSync(pathfile)
     }
  }
+ function ListOfImagesFromRequest (files, fileUploadPath){
+    if(files?.length > 0){
+        return ((files.map(file => path.join(fileUploadPath, file.filename))).map(item => item.replace(/\\/gi, "/")))
+    }else {
+        return []
+    }
+ }
 
 module.exports ={
     RandomNumberGenrator,
     SiginAccesToken,
     SiginrefreshToken,
     VerifyrefreshToken,
-    deleteFileInPublic
+    deleteFileInPublic,
+    ListOfImagesFromRequest
 }
