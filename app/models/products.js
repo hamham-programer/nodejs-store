@@ -17,7 +17,7 @@ const ProductSchema = new mongoose.Schema({
     type: {type: String, required:true}, //virtual || physical
     format: {type: String},
     supplier: {type: mongoose.Types.ObjectId, required:true},
-    feture: {type: Object, default:{
+    features: {type: Object, default:{
         length: "",
         height: "",
         width: "",

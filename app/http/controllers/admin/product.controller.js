@@ -1,31 +1,33 @@
 const Controller = require("../controller")
 const {createProductSchema} = require("../../validators/admin/product.schema")
-const {deleteFileInPublic,ListOfImagesFromRequest} = require("../../../utils/functions")
+const {deleteFileInPublic,ListOfImagesFromRequest, copyObject, setFeatures, deleteInvalidPropertyInObject} = require("../../../utils/functions")
 const {ObjectIdValidator} = require("../../validators/public.validator")
 const {ProductModel} = require("./../../../models/products")
 const createError = require("http-errors")
 const path = require("path")
 const {StatusCodes:HttpStatus} = require("http-status-codes")
+const productBlackList ={
+    BOOKMARKS : "bookmarks",
+    LIKES : "likes",
+    DISLIKES: "dislikes",
+    COMMENTS: "comments",
+    SUPPLIER: "supplier",
+    WEIGHT: "weight",
+    WIDTH: "width",
+    LENGTH: "length",
+    HEIGHT: "height"
+}
+ Object.freeze(productBlackList)//نگهداری از داده ها
 class productController extends Controller{
     async addProduct(req, res, next){
         try {
             const images = ListOfImagesFromRequest(req?.files || [], req.body.fileUploadPath)
             const ProductBody = await createProductSchema.validateAsync(req.body)
 /*             const image = (path.join(ProductBody.fileUploadPath, ProductBody.filename)).replace(/\\/gi, "/")   */     
-            const {title, text, short_text, category, tags, count, price,type, discount, width,weight,height,length} = ProductBody 
+            const {title, text, short_text, category, tags, count, price,type, discount} = ProductBody  //, width,weight,height,length
             const supplier = req.user._id
-            let feture = {}
-          
-            if(!isNaN(+width) || !isNaN(+weight) || !isNaN(+height) || !isNaN(+length) ){
-                if(!width)  feture.width = 0
-                else feture.width = +width
-                if(!weight) feture.weight = 0
-                else feture.weight = +weight
-                if(!height) feture.height = 0
-                else feture.height = +height
-                if(!length) feture.length = 0
-                else feture.length = +length
-            }
+            let feture = setFeatures(req.body)
+
             const product = await ProductModel.create ({title, text, short_text, category, tags, count, price, discount, feture, images, supplier,type })
             return res.status(HttpStatus.CREATED).json({
                 data:{
@@ -41,6 +43,22 @@ class productController extends Controller{
     }
     async editProduct(req, res, next){
         try {
+            const {id} = req.params
+            const product =  await this.findProductById(id)
+            const data = copyObject(req.body)
+            data.images = ListOfImagesFromRequest(req?.files || [], req.body.fileUploadPath)
+            data.features = setFeatures(req.body)
+            //let blackListField = [...object.values(productBlackList)]
+            let blackListField = Object.values(productBlackList) //آرایه ای از ولیوها در د داخل بلک لیست می ریزیم
+            deleteInvalidPropertyInObject(data, blackListField)
+            const updateProductResult = await ProductModel.updateOne({_id: product._id}, {$set: data})
+            if (updateProductResult.modifiedCount == 0) throw{status: HttpStatus.INTERNAL_SERVER_ERROR, message: "خطای داخلی"}
+            return res.status(HttpStatus.OK).json({
+                data:{
+                    statusCode: HttpStatus.OK,
+                    message: "بروزرسانی با موفقیت انجام شد"
+                }
+            })
             
         } catch (error) {
             next(error)            

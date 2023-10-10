@@ -67,6 +67,60 @@ const router = require("express").Router()
  */
 /**
  * @swagger
+ *  components:
+ *      schemas:
+ *          Edit-Product:
+ *              type: object
+ *              properties:
+ *                  title:
+ *                      type: String
+ *                      description: the title of product
+ *                  short_text:
+ *                      type: String
+ *                      description: the short_text of product
+ *                  text:
+ *                      type: string
+ *                      description: the text of product
+ *                  tags:
+ *                      type: array
+ *                      description: the tags of product
+ *                  category:
+ *                      type: string
+ *                      description: the category of product
+ *                  price:
+ *                      type: string
+ *                      description: the price of product
+ *                  discount:
+ *                      type: string
+ *                      description: the discount of product
+ *                  count:
+ *                      type: string
+ *                      description: the count of product
+ *                  images:
+ *                      type: array
+ *                      items:
+ *                          type: string
+ *                          format: binary
+ *                  height:
+ *                      type: string
+ *                      description: the height of product box
+ *                  weight:
+ *                      type: string
+ *                      description: the weight of product box
+ *                  width:
+ *                      type: string
+ *                      description: the with of product box
+ *                  length:
+ *                      type: string
+ *                      description: the length of product box
+ *                  type:
+ *                      type: string
+ *                      description: the type of product 
+ *                      example: virtual - physical
+ */
+
+/**
+ * @swagger
  *  /admin/products/add:
  *      post:
  *          tags: [product(Adminpanel)]
@@ -97,9 +151,7 @@ router.post("/add",uploadFile.array("images", 10),stringToArray("tags"), product
  *              200:
  *                  description: success  
  */
-router.get("/list", productController.getAllProducts)
-router.patch("/", productController.editProduct),
-router.get("/", productController.getAllProducts),
+router.get("/list", productController.getAllProducts),
 /**
  * @swagger
  *  /admin/products/{id}:
@@ -132,6 +184,28 @@ router.get("/:id", productController.getOneProduct)
  *                  description: success
  */
 router.delete("/remove/:id", productController.removeProductById)
+/**
+ * @swagger
+ *  /admin/products/edit/{id}:
+ *      patch:
+ *          tags: [product(Adminpanel)]
+ *          summary: create and save product
+ *          parameters:
+ *              -   in: path        
+ *                  name: id
+ *                  type: string    
+ *                  description: id of product for update product
+ *          requestBody:
+ *              required: true
+ *              content: 
+ *                  multipart/form-data:
+ *                      schema:
+ *                          $ref: "#/components/schemas/Edit-Product"
+ *          responses:
+ *              200:
+ *                  description: updated product   
+ */
+router.patch("/edit/:id",uploadFile.array("images", 10),stringToArray("tags"), productController.editProduct),
 
 module.exports = {
     AdminApiProductRouter : router

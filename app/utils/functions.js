@@ -77,6 +77,35 @@ function VerifyrefreshToken(token) {
         return []
     }
  }
+ function deleteInvalidPropertyInObject(data = {}, blackListField = []) {
+    const nulishData = ["", " ", "0", null, undefined]
+    Object.keys(data).forEach(key =>{
+        if(blackListField.includes(key)) delete data[key]
+        if(typeof data[key] == "string") data[key] = data[key].trim();
+        if(Array.isArray(data[key]) && data[key].length>0) data[key] = data[key].map(item => item.trim())
+        if(Array.isArray(data[key]) && data[key].length ===0) delete data[key] 
+        if(nulishData.includes(data[key])) delete data[key]
+    })
+ }
+ function copyObject(object) {
+    return JSON.parse(JSON.stringify(object))
+ }
+ function setFeatures(body) {
+    const {colors, width,weight,length,height} = body
+    let features = {}
+    if(!isNaN(+width) || !isNaN(+weight) || !isNaN(+height) || !isNaN(+length) ){
+        if(!width)  features.width = 0
+        else features.width = +width
+        if(!weight) features.weight = 0
+        else features.weight = +weight
+        if(!height) features.height = 0
+        else features.height = +height
+        if(!length) features.length = 0
+        else features.length = +length
+    }
+    return features
+    
+ }
 
 module.exports ={
     RandomNumberGenrator,
@@ -84,5 +113,8 @@ module.exports ={
     SiginrefreshToken,
     VerifyrefreshToken,
     deleteFileInPublic,
-    ListOfImagesFromRequest
+    ListOfImagesFromRequest,
+    copyObject,
+    setFeatures,
+    deleteInvalidPropertyInObject
 }
