@@ -1,4 +1,5 @@
-const {default:mongoose} = require("mongoose")
+const { mongoose } = require("mongoose");
+
 const { CommentSchema } = require ("./public.schema")
 const Schema = new mongoose.Schema({
     author: {type: mongoose.Types.ObjectId,ref: "user"},
