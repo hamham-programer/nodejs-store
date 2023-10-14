@@ -5,6 +5,8 @@ const {EXPIRES_IN,ROLES} = require("../../../../utils/constans")
 const Controller = require("../../controller")
 const createError = require("http-errors")
 const redisClient = require("../../../../utils/init_redis")
+const {StatusCodes:HttpStatus} = require("http-status-codes")
+
 
  class userAuthController extends Controller{
     async getOtp(req,res,next){
@@ -14,9 +16,9 @@ const redisClient = require("../../../../utils/init_redis")
             const code = RandomNumberGenrator()
             const result =await this.saveUser(mobile,code)
             if(!result) throw createError.Unauthorized("ورود شما انجام نشد")
-            return res.status(200).send({
+            return res.status(HttpStatus.OK).send({
+                statusCode: HttpStatus.OK,
                 data:{
-                    statusCode: 200,
                     message: "کد اعتبارسنجی با موفقیت برای شماارسال شد",
                     code,
                     mobile
