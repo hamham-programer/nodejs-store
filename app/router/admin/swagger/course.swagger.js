@@ -195,26 +195,3 @@
  *                  description: success
  */
 
-/**
- * @swagger
- *  /admin/courses/add-chapter:
- *      put:
- *          tags: [Course(AdminPanel)]
- *          summary: create new chapter for Courses
- *          requestBody:
- *              required: true
- *              content:
- *                  application/x-www-form-urlencoded:
- *                      schema:
- *                          $ref: "#/components/schemas/AddChapter"     
- *                  application/json:
- *                      schema:
- *                          $ref: "#/components/schemas/AddChapter"  
- *          responses:
- *              200:
- *                  description: success
- *                  content:
- *                      application/json:
- *                          schema: 
- *                              $ref: '#/definitions/publicDefinitions'                  
- */

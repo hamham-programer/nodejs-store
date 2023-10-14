@@ -1,11 +1,11 @@
-const Controller = require("../controller")
-const {CourseModel} = require("./../../../models/course")
+const Controller = require("../../controller")
+const {CourseModel} = require("./../../../../models/course")
 const {StatusCodes:HttpStatus} = require("http-status-codes")
-const {createCourseSchema} = require("../../validators/admin/course.schema")
+const {createCourseSchema} = require("../../../validators/admin/course.schema")
 const createError = require("http-errors")
 const {default: mongoose} = require("mongoose")
-
 const path = require("path")
+
 class CourseController extends Controller{
     async getListOfCourse(req,res,next){
         try {
@@ -91,41 +91,9 @@ class CourseController extends Controller{
             next(error)            
         }
     }
-    async addChapter(req,res,next){
-        try {
-            const {title, text, id} = req.body
-            await this.findCourseById(id)
-            const saveChapter = await CourseModel.updateOn({_id: id}, {$push: {
-                Chapter:{title, text, episodes: []}
-            }})
-            if(saveChapter.modifiedCount === 0) throw createError.InternalServerError("فصل افزوده نشد")
-            return res.status(HttpStatus.CREATED).json({
-                statusCode: HttpStatus.CREATED,
-                data:{
-                    message: "فصل با موفقیت افزوده شد"
-                }
-            })
-
-
-            
-        } catch (error) {
-            next(error)  
-            console.log(error);
-          
-        }
-    }
-    async findCourseById(id){
-        try {
-            if(!mongoose.isValidObject(id)) throw createError.BadRequest("شناسه صحیح نمی باشد")
-            const course = await CourseModel.findById(id)
-            if(!course) throw createError.NotFound("دوره ای یافت نشد")
-            return course
-            
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    
 }
 module.exports = {
-    CourseController: new CourseController()
+     CourseController: new CourseController()
 }
+/* /*     AbstractCourseController : CourseController, */

@@ -3,6 +3,8 @@ const {AdminApiCategoryRouter}= require("./category")
 const {AdminApiBlogtRouter}= require("./blog")
 const {AdminApiProductRouter}= require("./product")
 const {AdminApiCourseRouter}= require("./course")
+const {AdminApiChapterRouter}= require("./chapter")
+
 const {VerifyAccessToken} = require("../../http/middlewares/verifyAccessToken")
 
 const router = require("express").Router()
@@ -24,6 +26,7 @@ router.use("/courses", AdminApiCourseRouter),
 router.use("/products", AdminApiProductRouter),
 router.use("/category", AdminApiCategoryRouter),
 router.use("/blogs", AdminApiBlogtRouter),
+router.use("/chapter", AdminApiChapterRouter)
 
 
 module.exports = {
