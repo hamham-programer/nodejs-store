@@ -47,12 +47,65 @@ class ChapterController extends Controller{
         if(!chapters) throw createError.NotFound("دوره با این شناسه یافت نشد")
         return chapters
     }
+/*     async removeChapterById(req,res,next){
+        try {
+            const {chapterID} =req.params
+            const chapter = await this.getOneChapter(chapterID)
+            console.log(chapter);
+            const removeChapterResult = await CourseModel.updateOne({"chapters._id": chapterID},{
+                $pull: {
+                    chapters: {
+                        _id : chapterID
+                    }
+                }
+            })
+            if(removeChapterResult.modifiedCount == 0 ) throw new createError.InternalServerError("حذف فصل انجام نشد")
+            return res.status(HttpStatus.OK).json({
+                statusCode: HttpStatus.OK,
+                data:{
+                    message:"حذف فصل با موفقیت انجام شد"
+                }
+            })
+            
+        } catch (error) {
+            next(error)
+            
+        }
+
+    } */
+    async removeChapterById(req, res, next){
+        try {
+            const {chapterID} = req.params
+            await this.getOneChapter(chapterID);
+            const removeChapterResult = await CourseModel.updateOne({"chapters._id": chapterID}, {
+                $pull : {
+                    chapters : {
+                        _id : chapterID
+                    }
+                }
+            })
+            if(removeChapterResult.modifiedCount == 0) throw new createHttpError.InternalServerError("حذف فصل انجام نشد")
+            return res.status(HttpStatus.OK).json({
+                statusCode: HttpStatus.OK,
+                data : {
+                    message: "حذف فصل با موفقیت انجام شد"
+                }
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
     async findCourseById(id){
         if(!mongoose.isValidObjectId(id)) throw createError.BadRequest("شناسه صحیح نمی باشد")
         const course = await CourseModel.findById(id)
         if(!course) throw createError.NotFound("دوره ای یافت نشد")
         return course
     
+    }
+    async getOneChapter(id){
+        const chapter = await CourseModel.findOne({"chapters._id": id}, {"chapters.$": 1})
+        if(!chapter) throw createError.NotFound("فصلی با این شناسه یافت نشد")
+        return chapter
     }
 }
 module.exports ={

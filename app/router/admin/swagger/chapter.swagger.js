@@ -99,3 +99,22 @@
  *                          schema: 
  *                              $ref: '#/definitions/chaptersOfCourseDefinitions'                  
  */
+/**
+ * @swagger
+ *  /admin/chapter/remove/{chapterID}:
+ *      patch:
+ *          tags: [chapter(AdminPanel)]
+ *          summary: remove a Chapter of courses
+ *          parameters:
+ *              -   in: path
+ *                  name: chapterID
+ *                  type: string
+ *                  required: true
+ *          responses:
+ *              200:
+ *                  description: success
+ *                  content:
+ *                      application/json:
+ *                          schema: 
+ *                              $ref: '#/definitions/publicDefinition'
+ */
