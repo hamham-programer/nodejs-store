@@ -3,7 +3,7 @@ const { CommentSchema } = require ("./public.schema")
 const Episodes =  mongoose.Schema({
     title : {type: String, required: true},
     text : {type: String, default: ""},
-    type : {type: String, default: "free"},
+    type : {type: String, default: "unlock"},//قفل یا باز
     time : {type: String, required: true},  //با تایم اصلی جمع میشود
 
 })

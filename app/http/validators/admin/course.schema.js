@@ -15,10 +15,19 @@ const createCourseSchema = Joi.object({
     fileUploadPath: Joi.allow()
 
 });
+const createEpisodesSchema = Joi.object({
+    title: Joi.string().min(3).max(30).error(createError.BadRequest("عنوان دوره صحیح نمی باشد")),
+    text: Joi.string().error(createError.BadRequest("متن ارسال شده صحیح نمی باشد")),
+    type: Joi.string().regex(/(lock|unlock)/i),
+    time: Joi.string().regex(/[0-9]{2}\:[0-9]{2}\:[0-9]{2}/i), //00:00:00
+    chapterID: Joi.string().regex(MongoIdPattern).error(createError.BadRequest("شناسه فصل صحیح نمی باشد")),
+    courseID: Joi.string().regex(MongoIdPattern).error(createError.BadRequest("شناسه دوره صحیح نمی باش")),
+
+});
 
 module.exports ={
     createCourseSchema,
+    createEpisodesSchema
     
 }
 
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtb2JpbGUiOiIwOTEwMDYzOTY0OCIsInVzZXJJZCI6IjY1MGVjOWEyZTNlZGVlODI0NDk5NmIwNCIsImlhdCI6MTY5NzA5MjYwMCwiZXhwIjoxNjk3MDk2MjAwfQ.prp2yVsMZYrqg0Zc6dIoaYVECosPBwOAxqmK1iukgqk
