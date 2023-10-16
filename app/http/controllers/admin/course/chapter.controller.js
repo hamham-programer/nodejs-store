@@ -4,7 +4,7 @@ const {CourseModel} = require("./../../../../models/course")
 const createError = require("http-errors")
 const {default: mongoose} = require("mongoose")
 const {StatusCodes:HttpStatus} = require("http-status-codes")
-
+const {deleteInvalidPropertyInObject} = require("../../../../utils/functions")
 
 //class ChapterController extends AbstractCourseController{
 class ChapterController extends Controller{
@@ -93,6 +93,29 @@ class ChapterController extends Controller{
             })
         } catch (error) {
             next(error)
+        }
+    }
+    async updateChapterById(req,res,next){
+        try {
+            const {chapterID} = req.params
+            await this.getOneChapter(chapterID)
+            const data = req.body
+            deleteInvalidPropertyInObject(data,["_id"])          
+            const updateChapterResult = await CourseModel.updateOne({"chapters._id" : chapterID},{
+                $set:{
+                    "chapters.$" : data
+                }
+            })
+            if(updateChapterResult.modifiedCount == 0) throw new createError.InternalServerError("بروزرسانی انجام نشد")
+            return res.status(HttpStatus.OK).json({
+                statusCode: HttpStatus.OK,
+                data:{
+                    message:"بروزرسانی با موفقیت انجام شد"
+                }
+            })
+            
+        } catch (error) {
+            next(error)            
         }
     }
     async findCourseById(id){

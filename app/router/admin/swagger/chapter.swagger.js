@@ -17,6 +17,15 @@
  *                  text:
  *                      type: string
  *                      example:  the describe about this chapter
+ *          EditChapter:
+ *              type: object
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      example: Chapter1
+ *                  text:
+ *                      type: string
+ *                      example:  the describe about this chapter
  */
 /**
  * @swagger
@@ -110,6 +119,35 @@
  *                  name: chapterID
  *                  type: string
  *                  required: true
+ *          responses:
+ *              200:
+ *                  description: success
+ *                  content:
+ *                      application/json:
+ *                          schema: 
+ *                              $ref: '#/definitions/publicDefinition'
+ */
+/**
+ * @swagger
+ *  /admin/chapter/update/{chapterID}:
+ *      patch:
+ *          tags: [chapter(AdminPanel)]
+ *          summary: update detail of courses
+ *          parameters:
+ *              -   in: path
+ *                  name: chapterID
+ *                  type: string
+ *                  required: true
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/x-www-form-urlencoded:
+ *                      schema:
+ *                          $ref: "#/components/schemas/EditChapter"
+ *                  application/json:
+ *                      schema:
+ *                          $ref: "#/components/schemas/EditChapter"
+ *                      
  *          responses:
  *              200:
  *                  description: success

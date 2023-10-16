@@ -32,6 +32,10 @@ const CourseSchema = new mongoose.Schema({
     chapters: {type: [Chapter], default: []},
     students: {type: [mongoose.Types.ObjectId], default: [], ref: "user"}
     
+},{
+    toJSON:{
+        virtuals: true //برای استفاده از Populate باید این خط اضافه شود
+    }
 });
 CourseSchema.index({title:"", short_text: "", text: ""})
 module.exports = {

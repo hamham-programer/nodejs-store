@@ -4,6 +4,7 @@ const router = require("express").Router()
 router.put("/add", ChapterController.addChapter) //create new chapter
 router.get("/list/:courseID", ChapterController.chaptersOfCourse) //get chapter,
 router.patch("/remove/:chapterID", ChapterController.removeChapterById) //remove chapter
+router.patch("/update/:chapterID", ChapterController.updateChapterById) //update chapter
 
 module.exports ={
 AdminApiChapterRouter: router
