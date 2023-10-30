@@ -5,6 +5,7 @@ const Episodes =  mongoose.Schema({
     text : {type: String, default: ""},
     type : {type: String, default: "unlock"},//قفل یا باز
     time : {type: String, required: true},  //با تایم اصلی جمع میشود
+    videoAddress: {type: string, required:true}
 
 })
 const Chapter = mongoose.Schema({

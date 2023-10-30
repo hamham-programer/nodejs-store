@@ -19,10 +19,10 @@ const createEpisodesSchema = Joi.object({
     title: Joi.string().min(3).max(30).error(createError.BadRequest("عنوان دوره صحیح نمی باشد")),
     text: Joi.string().error(createError.BadRequest("متن ارسال شده صحیح نمی باشد")),
     type: Joi.string().regex(/(lock|unlock)/i),
-    time: Joi.string().regex(/[0-9]{2}\:[0-9]{2}\:[0-9]{2}/i), //00:00:00
     chapterID: Joi.string().regex(MongoIdPattern).error(createError.BadRequest("شناسه فصل صحیح نمی باشد")),
     courseID: Joi.string().regex(MongoIdPattern).error(createError.BadRequest("شناسه دوره صحیح نمی باش")),
-
+    filename: Joi.string().regex(/(\.mp4|\.mpg|\.avi|\.mkv|\.mov)$/).error(createError.BadRequest("ویدیو ارسال شده صحیح نمی باشد")),
+    fileUploadPath: Joi.allow()
 });
 
 module.exports ={

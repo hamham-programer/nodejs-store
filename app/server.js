@@ -7,6 +7,8 @@ const swaggerUI = require("swagger-ui-express")
 const swaggerJsDoc = require("swagger-jsdoc")
 const {default:mongoose} = require ("mongoose")
 const cors = require("cors")
+require("dotenv").config()
+
 module.exports = class Application{
     #app = express()
     #PORT
