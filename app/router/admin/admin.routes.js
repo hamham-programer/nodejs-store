@@ -30,7 +30,7 @@ router.use("/products", AdminApiProductRouter),
 router.use("/category", AdminApiCategoryRouter),
 router.use("/blogs", AdminApiBlogtRouter),
 router.use("/chapter", AdminApiChapterRouter),
-router.use("/episode", AdminApiChapterRouter)
+router.use("/episode", AdminApiEpisodesRouter)
 
 
 

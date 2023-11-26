@@ -16,15 +16,15 @@ class EpisodesController extends Controller {
             const videoUrl = `${process.env.BASE_URL}: ${process.env.APPLICATION_PORT}/${videoAddress}`
             const seconds = await getVideoDurationInSeconds(videoUrl)
             const time = getTime(seconds)
-            const episode ={title, text, type, time, videoAddress}
-            const CreateEpisodeResult = await CourseModel.updateOne({_id:courseID, "chapterID._id : chapterID"}, {
+            const episode = {title, text, type, time, videoAddress}
+            const CreateEpisodeResult = await CourseModel.updateOne({_id:courseID, "chapters._id" : chapterID}, {
                 $push: {
                     "chapters.$.episodes" : episode
                 }
             })
             if(createEpisodesSchema.modifiedCount == 0) throw new createError.InternalServerError("افزودن اپیزود انجام نشد")
             return res.status(HttpStatus.CREATED).json({
-                status: HttpStatus.CREATED
+                statusCode: HttpStatus.CREATED,
                 data: {
                     message: "افزودن ایپزود با موفقیت انجام شد"
                 }    

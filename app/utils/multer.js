@@ -43,8 +43,8 @@ const storage = multer.diskStorage({
         }
            return cb (createError.BadRequest("فرمت ارسالی تصویر صحیح نمی باشد"))
     }
-    const picturemaxSize = 1* 1000 * 1000 //1mb 
-    const uploadFile = multer({storage, fileFilter, limits: {fileSize: picturemaxSize}})
+    const pictureMaxSize = 1* 1000 * 1000 //1mb 
+    const uploadFile = multer({storage, fileFilter, limits: {fileSize: pictureMaxSize}})
 
     function videoFilter(req,file,cb){
         const ext = path.extname(file.originalname)
@@ -54,10 +54,10 @@ const storage = multer.diskStorage({
         }
            return cb (createError.BadRequest("فرمت ارسالی ویدیو صحیح نمی باشد"))
     }
-    const videomaxSize = 1* 1000 * 1000 //300mb 
-    const uploadVideo = multer({storage, videoFilter, limits: {fileSize: videomaxSize}}) //مخصوص ویدیو
+    const videoMaxSize = 300* 1000 * 1000 //300mb 
+    const uploadVideo = multer({storage, videoFilter, limits: {fileSize: videoMaxSize}}) //مخصوص ویدیو
 
-module.exports ={
+module.exports = {
     uploadFile,
     uploadVideo
 }

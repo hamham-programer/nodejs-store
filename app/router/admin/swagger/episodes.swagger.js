@@ -42,7 +42,7 @@
  *  /admin/episode/add:
  *      post:
  *          tags: [Episode(AdminPanel)]
- *          summary: create new Chapter for courses
+ *          summary: create new Episode  for courses
  *          requestBody:
  *              required: true
  *              content:
