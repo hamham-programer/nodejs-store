@@ -28,6 +28,9 @@ const ProductSchema = new mongoose.Schema({
     }}
   });
   ProductSchema.index({title:"text", short_text: "text", text: "text", type: "text"}) // طبق این سه مورد سرچ کنه
+  ProductSchema.virtual("imagesURL").get(function(){   //یک فیلد جدید ایجاد و مقدار جدید توش میریزیم
+    return this.images.map(iamge =>`${process.env.BASE_URL}:${process.env.APPLICATION_PORT}/${image}`)
+})
 module.exports = {
     ProductModel : mongoose.model ("product", ProductSchema)
 }
